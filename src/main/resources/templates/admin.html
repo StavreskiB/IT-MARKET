@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>It-Market</title>
+
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/custom.css">
+    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="/assets/vendor/jquery-migrate/jquery-migrate.min.js"></script>
+    <script src="/assets/vendor/popper.min.js"></script>
+    <script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+
+</head>
+
+<script>
+
+    $(document).ready(function(){
+        $("#showusers").click(function () {
+            $("#usr").slideToggle();
+        });
+
+        $("#showpub").click(function () {
+            $("#pub").slideToggle();
+        });
+
+        $("#shownew").click(function () {
+            $("#newp").slideToggle();
+        });
+
+
+    });
+</script>
+
+<body id="page-top">
+
+<!-- Navigation-->
+
+<nav class="navbar navbar-expand-md navbar-dark bg-nav">
+    <div class="container">
+        <a class="navbar-brand text-white" href="/products" sec:authorize="isAuthenticated()" sec:authentication="name"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarsExampleDefault">
+            <ul class="navbar-nav">
+                <li class="nav-item m-auto">
+                    <a class="nav-link active nav-hover" href="/products"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item nav-hover">
+                    <a class="nav-link text-white" href="/add-new"><i class="fas fa-plus"></i> Add product</a>
+                </li>
+                <li class="nav-item nav-hover" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link text-white" href="/shopping_cart"><i class="fas fa-shopping-cart"></i> Shopping cart</a>
+                </li>
+                <li class="nav-item nav-hover" sec:authorize="isAuthenticated()">
+                    <a class="nav-link text-white" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<section class="jumbotron text-center blog">
+    <h1 class="text-white text-uppercase big-heading">Admin panel</h1>
+    <div class="divider-custom text-white">
+        <div class="divider-custom-line mr-1 bg-light"></div>
+        <div class="divider-custom-icon"><i class="fas fa-desktop"></i></div>
+        <div class="divider-custom-line ml-1 bg-light"></div>
+    </div>
+    <h5 class="text-white text-uppercase">Admin panel</h5>
+</section>
+
+
+<div class="row justify-content-md-center mt-3">
+    <div class="col-md-3 img-hov" id="showusers" href="#usr">
+        <h3 class="text-center">All users</h3>
+        <img class="img-w" src="/assets/2.png">
+    </div>
+    <div class="col-md-3 img-hov" id="showpub">
+        <h3 class="text-center">Published products</h3>
+        <img class="img-w" src="/assets/1.png">
+    </div>
+    <div class="col-md-3 img-hov" id="shownew">
+        <h3 class="text-center">Products awaiting approval</h3>
+        <img class="img-w" src="/assets/3.png">
+    </div>
+</div>
+
+<div class="row justify-content-md-center">
+    <div class="col-md-10">
+
+        <!-- All users -->
+        <table class="table table-striped text-center" id="usr">
+            <thead class="text-center">
+                <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">Mobile phone</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr th:each="user : ${user}">
+                    <th scope="col" th:text="${user.getUsername()}"></th>
+                    <th scope="col" th:text="${user.getMob_number()}"></th>
+                    <th scope="col">
+                        <form th:action="@{/admin/{username}/block(username=${user.getUsername()})}" th:method="delete">
+                            <button type="submit" class="btn btn-sm btn-danger bnt-mod-point"><i class="fas fa-ban mr-1"></i>Block</button>
+                        </form>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Published products -->
+        <table class="table table-striped text-center" id="pub">
+            <thead class="text-center">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Description</th>
+                <th scope="col">Category</th>
+                <th scope="col">SubCategory</th>
+                <th scope="col">Publish</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody class="text-center">
+            <tr th:each="product : ${products}" th:if="${product.getPublished() == '1'}">
+                <td scope="col" th:text="${product.getId()}"></td>
+                <td scope="col" th:text="${product.getName()}"></td>
+                <td scope="col" th:text="${product.getPrice()}  + ' $'"></td>
+                <td scope="col" th:text="${product.getDescription()}"></td>
+                <td scope="col" th:text="${product.getCategory().getName_category()}"></td>
+                <td scope="col" th:text="${product.getSubcategory().getName_subcategory()}"></td>
+                <td scope="col" th:text="${product.getPublished()}"></td>
+                <td scope="col">
+                    <form th:action="@{/admin/{id}/delete(id=${product.getId()})}" th:method="delete">
+                        <button type="submit" class="btn btn-sm btn-danger bnt-mod-point"><i class="fa fa-trash mr-1"></i>Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Pending products -->
+        <table class="table table-striped text-center" id="newp">
+            <thead class="text-center">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Description</th>
+                <th scope="col">Category</th>
+                <th scope="col">SubCategory</th>
+                <th scope="col">Publish</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody class="text-center">
+            <tr th:each="product : ${products}" th:if="${product.getPublished() == '0'}">
+                <td scope="col" th:text="${product.getId()}"></td>
+                <td scope="col" th:text="${product.getName()}"></td>
+                <td scope="col" th:text="${product.getPrice()}  + ' $'"></td>
+                <td scope="col" th:text="${product.getDescription()}"></td>
+                <td scope="col" th:text="${product.getCategory().getName_category()}"></td>
+                <td scope="col" th:text="${product.getSubcategory().getName_subcategory()}"></td>
+                <td scope="col" th:text="${product.getPublished()}"></td>
+                <td scope="col">
+                    <form th:action="@{/admin/{id}/publish(id=${product.getId()})}" th:method="post">
+                        <button type="submit" class="btn btn-sm btn-danger bnt-mod-point"><i class="fa fa-check mr-1"></i>Publish</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+</body>
+</html>

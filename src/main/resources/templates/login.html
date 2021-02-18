@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Login</title>
+
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/custom.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="/assets/vendor/jquery-migrate/jquery-migrate.min.js"></script>
+    <script src="/assets/vendor/popper.min.js"></script>
+    <script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</head>
+<body class="blog">
+<div class="container" >
+    <h1 class="text-info" th:if="${info}" th:text="${info}"></h1>
+</div>
+<div class="container mt-6" style="text-align: -webkit-center;">
+    <form class="form-signin w-50 log_form"  method="post" action="/login">
+        <h2 class="form-signin-heading pt-5 text-white">Login</h2>
+        <p class="mt-5 w-50">
+            <label for="username" class="sr-only">Username</label>
+            <input type="text" id="username" name="username" class="text-white form-control border-primary inp-radius " placeholder="Username" required="" autofocus="">
+        </p>
+        <p class="mt-2 w-50">
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" id="password" name="password" class="text-white form-control border-primary inp-radius " placeholder="Password" required="">
+        </p>
+        <button class="btn btn-lg btn-outline-primary text-white custom-btn btn-block w-50" type="submit"><i class='fas fa-sign-in-alt'></i> Login</button>
+        <button onclick="window.location.href='/signup'" class="btn btn-lg text-white custom-btn btn-outline-primary btn-block w-50" type="submit"><i class="fas fa-user-plus"></i> Register</button>
+    </form>
+
+</div>
+</body>
+</html>
